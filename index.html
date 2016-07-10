@@ -1,0 +1,85 @@
+<html ng-app="app">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stef GitHub</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <!-- ng-cloak prevents showing {} while loading page.
+       The problem is that angularJS isn't loaded yet so ng-cloak is not defined.
+       We define the css class ng-cloak in css/styles.css file in order to make it available until angularJS loads.
+  -->
+  <body  ng-controller="controller" class="ng-cloak">
+    <br>
+    
+    <!-- Input form  -->
+    <form class="container form-horizontal">
+      <div class="form-group">
+        <label class="col-xs-12 col-sm-2 control-label" for="inputSuccess">
+          Username
+        </label>
+        <div class="col-xs-12 col-sm-10">
+          <input type="text" id="inputSuccess" class="form-control"
+            placeholder="Insert github username" autofocus ng-model="username">
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-offset-2 col-sm-10 has-error"
+        ng-show="serverFound && userTried && !userFound">
+        <span class="help-block">
+          The Github user does not exist.
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-offset-2 col-sm-10 has-error"
+        ng-show="!serverFound">
+        <span class="help-block">
+          Github API does not respond.
+        </span>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-12 col-sm-offset-2 col-sm-10">
+          <input type="submit" class="col-xs-12 btn btn-primary" value="Submit"
+            ng-click="getGithubUser()">
+        </div>
+      </div>
+    </form>
+    
+    <!-- User info  -->
+    <div class="container" ng-show="userFound">
+      <div class="row">
+        <div class="col-xs-12 col-sm-4">
+          <span class="badge">
+            {{name}}
+          </span>
+        </div>
+        <div class="col-xs-12 col-sm-8">
+          <a href="{{ userData.html_url }}">
+              <img src="{{ avatar_url }}" width="80" height="80"
+                alt="{{ username }}" align="middle">
+          </a>
+        </div>
+      </div>
+
+      <br>
+
+      <!-- Repositories list -->
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="repo in repoData"
+          ng-show="reposFound">
+          <a href="{{repo.html_url}}"> {{repo.name}} </a>
+          <br>
+          <small>{{repo.description}}</small>
+        </li>
+        <li class="list-group-item has-error" ng-show="!reposFound">
+          <span class="help-block">
+            The Github user does not have repos.
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="app/app.js"></script>
+  </body>
+</html>
